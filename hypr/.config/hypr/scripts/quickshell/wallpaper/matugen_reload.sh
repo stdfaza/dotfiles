@@ -40,22 +40,22 @@ except Exception as e:
 # ------------------------------------------------------------------------------
 # If Tera dumped {"color": "#hex"} into your text files, this strips it to #hex.
 TEXT_FILES=(
-    "$HOME/.config/kitty/kitty-matugen-colors.conf"
-    "$HOME/.config/nvim/matugen_colors.lua"
-    "$HOME/.config/cava/colors"
-    "$HOME/.config/swayosd/style.css"
-    "$HOME/.config/swaync/style.css"
-    "$HOME/.config/rofi/theme.rasi"
+  "$HOME/.config/kitty/kitty-matugen-colors.conf"
+  "$HOME/.config/nvim/matugen_colors.lua"
+  "$HOME/.config/cava/colors"
+  "$HOME/.config/swayosd/style.css"
+  "$HOME/.config/swaync/style.css"
+  "$HOME/.config/rofi/theme.rasi"
 )
 
 for file in "${TEXT_FILES[@]}"; do
-    # Check if file exists and we have write permissions (avoids sudo password hangs on SDDM)
-    if [ -f "$file" ] && [ -w "$file" ]; then
-        # Looks for {"color": "#abcdef"} and replaces it with #abcdef
-        sed -i -E 's/\{[[:space:]]*"color":[[:space:]]*"([^"]+)"[[:space:]]*\}/\1/g' "$file"
-    elif [ -f "$file" ]; then
-        echo "Warning: No write permission for $file (Skipping text clean-up)"
-    fi
+  # Check if file exists and we have write permissions (avoids sudo password hangs on SDDM)
+  if [ -f "$file" ] && [ -w "$file" ]; then
+    # Looks for {"color": "#abcdef"} and replaces it with #abcdef
+    sed -i -E 's/\{[[:space:]]*"color":[[:space:]]*"([^"]+)"[[:space:]]*\}/\1/g' "$file"
+  elif [ -f "$file" ]; then
+    echo "Warning: No write permission for $file (Skipping text clean-up)"
+  fi
 done
 
 # ------------------------------------------------------------------------------
@@ -66,21 +66,24 @@ done
 killall -USR1 kitty
 
 # Reload CAVA
-if pgrep -x "cava" > /dev/null; then
-    # Rebuild the final config file from the base and newly generated colors
-    cat ~/.config/cava/config_base ~/.config/cava/colors > ~/.config/cava/config 2>/dev/null
-    # Tell CAVA to reload the config
-    killall -USR1 cava
+if pgrep -x "cava" >/dev/null; then
+  # Rebuild the final config file from the base and newly generated colors
+  cat ~/.config/cava/config_base ~/.config/cava/colors >~/.config/cava/config 2>/dev/null
+  # Tell CAVA to reload the config
+  killall -USR1 cava
 fi
 
 # Reload SwayNC CSS styling dynamically without killing the daemon
-if command -v swaync-client &> /dev/null; then
-    swaync-client -rs
+if command -v swaync-client &>/dev/null; then
+  swaync-client -rs
 fi
 
 # Putting swayosd reload into the background to not clutter the reloading process
 if systemctl --user is-active --quiet swayosd.service; then
-    systemctl --user restart swayosd.service &
+  systemctl --user restart swayosd.service &
 fi
 
 wait
+killall swayosd-server
+sleep 0.2
+swayosd-server &

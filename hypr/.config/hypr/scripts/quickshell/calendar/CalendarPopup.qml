@@ -662,7 +662,7 @@ Item {
                                     Text { 
                                         Layout.alignment: Qt.AlignHCenter
                                         text: modelData.icon || (window.weatherData && window.weatherData.forecast[window.weatherView] ? window.weatherData.forecast[window.weatherView].icon : "")
-                                        font.family: "Iosevka Nerd Font"; font.pixelSize: window.s(18)
+                                        font.family: "Symbols Nerd Font"; font.pixelSize: window.s(18)
                                         color: isHighlighted ? window.base : (modelData.hex || window.text)
                                         
                                         transform: Translate { y: hrMa.containsMouse ? window.s(-3) : 0 }
@@ -1021,7 +1021,7 @@ Item {
                                     
                                     Text { 
                                         text: parent.parent.gaugeIcon
-                                        font.family: "Iosevka Nerd Font"
+                                        font.family: "Symbols Nerd Font"
                                         font.pixelSize: window.s(14)
                                         color: gaugeMa.containsMouse ? window.textAccent : window.overlay0
                                         Behavior on color { ColorAnimation { duration: 200 } }
