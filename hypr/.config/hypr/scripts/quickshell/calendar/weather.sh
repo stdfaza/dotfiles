@@ -2,7 +2,7 @@
 
 # Paths
 cache_dir="$HOME/.cache/quickshell/weather"
-json_file="${cache_dir}//home/fazha/.config/hypr/scripts/quickshell/calendar/weather.sh"
+json_file="${cache_dir}/weather.json"
 view_file="${cache_dir}/view_id"
 daily_cache_file="${cache_dir}/daily_weather_cache.json"
 next_day_cache_file="${cache_dir}/next_day_precache.json"
